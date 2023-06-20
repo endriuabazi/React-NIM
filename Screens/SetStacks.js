@@ -123,6 +123,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  picker: {
+    width: "100%",
+    height: 40,
+  },
 });
 
 export default SetStacks;
