@@ -7,14 +7,12 @@ const GameScreen = ({ route }) => {
   const [selectedStack, setSelectedStack] = useState(0);
   const [selectedCount, setSelectedCount] = useState(1);
   const [updatedStackItems, setUpdatedStackItems] = useState([...stackItems]);
-
+  const [currentPlayer, setCurrentPlayer] = useState(playerName);
 
   useEffect(() => {
-    console.log('🗿🗿', stackItems);
-    stackItems.forEach((item, index) => {
-      console.log(`Stack ${index + 1}: ${item}`);
-    });
-  }, []);
+    console.log(`updatedStackItems: ${updatedStackItems}`);
+  }, [updatedStackItems]);
+  
 
   
 
@@ -22,6 +20,41 @@ const GameScreen = ({ route }) => {
     const stackVisual = new Array(stackLength).fill('🗿');
     return `[ ${stackVisual.join(' ')} ]`;
   };
+
+  const handleComputerMove = () => {
+    // Find the Nim sum of all stack sizes
+    const nimSum = updatedStackItems.reduce((acc, stackSize) => acc ^ stackSize, 0);
+  
+    if (nimSum === 0) {
+      // If the Nim sum is 0, it means the computer is in a losing position
+      // You can handle this case as desired (e.g., end the game or make a random move)
+      return;
+    }
+  
+    // Find the first stack with a stack size that, when XORed with the Nim sum, results in a smaller stack size
+    const stackIndex = updatedStackItems.findIndex((stackSize) => (stackSize ^ nimSum) < stackSize);
+  
+    if (stackIndex === -1) {
+      // If no such stack is found, make a random move
+      handleRandomComputerMove();
+      return;
+    }
+  
+    // Calculate the number of items to remove from the selected stack
+    const removeCount = updatedStackItems[stackIndex] - (updatedStackItems[stackIndex] ^ nimSum);
+  
+    const newStackItems = [...updatedStackItems];
+    newStackItems[stackIndex] -= removeCount;
+    setUpdatedStackItems(newStackItems);
+  
+    // Switch back to the user's turn
+    setCurrentPlayer(playerName);
+  };
+  
+  
+  
+  
+  
   const handleRemoveElements = () => {
     const selectedStackItems = updatedStackItems[selectedStack];
     const selectedCountValue = parseInt(selectedCount);
@@ -38,11 +71,12 @@ const GameScreen = ({ route }) => {
   
     const newStackItems = [...updatedStackItems];
     newStackItems[selectedStack] -= selectedCountValue;
-    console.log('eins zwei polize 🚔🚨', newStackItems);
-  
     setUpdatedStackItems(newStackItems);
-  };
   
+    // Switch to the computer's turn
+    setCurrentPlayer('Computer');
+    setTimeout(handleComputerMove, 1000); // Add a delay before the computer makes its move
+  };
   
   return (
     <View style={styles.container}>
