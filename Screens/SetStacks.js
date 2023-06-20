@@ -7,7 +7,6 @@ const SetStacks = ({ route, navigation }) => {
   const [stackItems, setStackItems] = useState([]);
 
   const handleStartGame = () => {
-    console.log('einz zwei',stackItems);
     // Pass the game setup parameters and stack items to the GameScreen
     navigation.navigate('GameScreen', {
       playerName,
@@ -29,10 +28,21 @@ const SetStacks = ({ route, navigation }) => {
     }
   };
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <View>
       <Modal visible={showModal} animationType="slide">
-        {/* ... modal content ... */}
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>Player Name: {playerName}</Text>
+            <Text>Number of Stacks: {numberOfStacks}</Text>
+            <Text>Game: {gameType}</Text>
+            <Button title="Close" onPress={closeModal} />
+          </View>
+        </View>
       </Modal>
 
       <View style={styles.container}>
@@ -46,17 +56,19 @@ const SetStacks = ({ route, navigation }) => {
               onChangeText={(text) => handleAddItem(stackIndex, text)}
               value={stackItems[stackIndex] ? String(stackItems[stackIndex]) : ''}
             />
-            {stackItems[stackIndex] && (
+            {showModal && stackItems[stackIndex] && (
               <Text style={styles.stackItems}>Items: {stackItems[stackIndex]}</Text>
             )}
           </View>
         ))}
-        <TouchableOpacity style={styles.button} onPress={handleStartGame}>
+    
+        <TouchableOpacity style={styles.startButton} onPress={handleStartGame}>
           <Text style={styles.buttonText}>Start Game</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.detailsButton} onPress={() => setShowModal(true)}>
+          <Text style={styles.buttonText}>Details</Text>
+        </TouchableOpacity>
       </View>
-
-      <Button title="Details" onPress={() => setShowModal(true)} />
     </View>
   );
 };
@@ -81,10 +93,6 @@ const styles = StyleSheet.create({
   stackContainer: {
     marginBottom: 20,
   },
-  stackLabel: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
   stackInput: {
     width: '100%',
     height: 40,
@@ -95,11 +103,19 @@ const styles = StyleSheet.create({
   stackItems: {
     marginTop: 5,
   },
-  button: {
+  detailsButton: {
+    backgroundColor: '#2196F3',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  startButton: {
     backgroundColor: '#4CAF50',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
+    marginBottom: 10,
   },
   buttonText: {
     color: '#fff',
