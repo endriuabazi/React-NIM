@@ -162,16 +162,18 @@ const GameScreen = ({ route }) => {
         </View>
 
         <View style={styles.stackCard}>
-          <Text style={styles.title}>Game Data:</Text>
-          <Text style={styles.gameData}>
-            Player Name: {playerName} | Game Type: {gameType} | Turn:{" "}
-            {currentPlayer === playerName ? "User" : "Computer"}
+          <Text style={styles.title}>Game Details:</Text>
+          <Text style={styles.title2}>Game Data: {gameType}</Text>
+          <Text style={styles.title2}> Player Name: {playerName}</Text>
+          <Text style={styles.title2}>
+            {" "}
+            Turn: {currentPlayer === playerName ? "User" : "Computer"}
           </Text>
         </View>
       </View>
 
       <View style={styles.pickerContainer}>
-        <Text>Select Stack:</Text>
+        <Text style={styles.label}>Select Stack:</Text>
         <Picker
           style={styles.picker}
           selectedValue={selectedStack}
@@ -233,10 +235,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 16,
   },
+  title2: {
+    fontSize: 15,
+    marginBottom: 16,
+  },
   pickerContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 16,
+    width: "100%",
   },
   itemContainer: {
     marginBottom: 8,
